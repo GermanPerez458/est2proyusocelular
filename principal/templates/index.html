@@ -18,13 +18,6 @@
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-            },
-            startup: {
-                pageReady: () => {
-                    return MathJax.startup.defaultPageReady().then(() => {
-                        console.log('MathJax inicial listo');
-                    });
-                }
             }
         };
     </script>
@@ -43,14 +36,67 @@
             --elephant-900: #1c4a5d;
             --elephant-950: #0e3546;
         }
+
+        /* --- FONDO ANIMADO MESH --- */
+        #animated-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background-color: hsla(305,0%,0%,1);
+            background-image: 
+                radial-gradient(circle at var(--x-0) var(--y-0), var(--c-0) var(--s-start-0),transparent var(--s-end-0)),
+                radial-gradient(circle at var(--x-1) var(--y-1), var(--c-1) var(--s-start-1),transparent var(--s-end-1)),
+                radial-gradient(circle at var(--x-2) var(--y-2), var(--c-2) var(--s-start-2),transparent var(--s-end-2)),
+                radial-gradient(circle at var(--x-3) var(--y-3), var(--c-3) var(--s-start-3),transparent var(--s-end-3)),
+                radial-gradient(circle at var(--x-4) var(--y-4), var(--c-4) var(--s-start-4),transparent var(--s-end-4)),
+                radial-gradient(circle at var(--x-5) var(--y-5), var(--c-5) var(--s-start-5),transparent var(--s-end-5)),
+                radial-gradient(circle at var(--x-6) var(--y-6), var(--c-6) var(--s-start-6),transparent var(--s-end-6)),
+                radial-gradient(circle at var(--x-7) var(--y-7), var(--c-7) var(--s-start-7),transparent var(--s-end-7)),
+                radial-gradient(circle at var(--x-8) var(--y-8), var(--c-8) var(--s-start-8),transparent var(--s-end-8)),
+                radial-gradient(circle at var(--x-9) var(--y-9), var(--c-9) var(--s-start-9),transparent var(--s-end-9));
+            background-blend-mode: normal;
+            will-change: transform, opacity;
+            contain: paint;
+            animation: ani-animateMesh 10s linear infinite alternate;
+            
+            /* Valores Iniciales */
+            --y-0:93%; --x-0:93%; --s-start-0:14.48%; --s-end-0:72%; --c-0:hsla(212,0%,0%,1);
+            --c-1:hsla(212,0%,0%,1); --y-1:9%; --x-1:26%; --s-start-1:0%; --s-end-1:45%;
+            --s-start-2:2.92%; --s-end-2:22.38%; --c-2:hsla(257,91%,27%,0.35); --y-2:79%; --x-2:15%;
+            --y-3:104%; --c-3:hsla(212,100%,50%,0.5); --s-start-3:3.98%; --s-end-3:47.58%; --x-3:40%;
+            --x-4:0%; --s-start-4:2.39%; --s-end-4:29.30%; --y-4:60%; --c-4:hsla(224,72%,36%,1);
+            --c-5:hsla(248,52%,24%,1); --y-5:37%; --s-start-5:2.92%; --s-end-5:22.38%; --x-5:92%;
+            --s-start-6:13.17%; --s-end-6:31.74%; --c-6:hsla(212,100%,50%,0.19); --y-6:16%; --x-6:101%;
+            --y-7:13%; --x-7:90%; --s-start-7:1%; --s-end-7:31%; --c-7:hsla(227,98%,53%,1);
+            --s-start-8:3.98%; --s-end-8:13.10%; --x-8:104%; --c-8:hsla(166,71%,60%,0.32); --y-8:56%;
+            --c-9:hsla(219,83%,23%,0.18); --s-start-9:18.59%; --s-end-9:31%; --x-9:97%; --y-9:19%;
+        }
+
+        @keyframes ani-animateMesh {
+            100% {
+                --y-0:9%; --x-0:7%; --s-start-0:2.39%; --s-end-0:43.9%; --c-0:hsla(306,0%,0%,1);
+                --c-1:hsla(306,0%,0%,1); --y-1:93%; --x-1:96%; --s-start-1:9%; --s-end-1:54.8%;
+                --s-start-2:3%; --s-end-2:26.7%; --c-2:hsla(166,72%,60%,1); --y-2:103%; --x-2:-2%;
+                --y-3:82%; --c-3:hsla(180,100%,50%,0.26); --s-start-3:2.39%; --s-end-3:32.06%; --x-3:33%;
+                --x-4:37%; --s-start-4:4.40%; --s-end-4:37.2%; --y-4:81%; --c-4:hsla(212,88%,26%,0.58);
+                --c-5:hsla(271,98%,53%,0.31); --y-5:99%; --s-start-5:3%; --s-end-5:32.5%; --x-5:54%;
+                --s-start-6:6%; --s-end-6:42.5%; --c-6:hsla(262,100%,50%,0.15); --y-6:43%; --x-6:104%;
+                --y-7:-16%; --x-7:104%; --s-start-7:5%; --s-end-7:13.1%; --c-7:hsla(298,36%,23%,1);
+                --s-start-8:2.39%; --s-end-8:27.1%; --x-8:97%; --c-8:hsla(180,100%,50%,0.11); --y-8:30%;
+                --c-9:hsla(219,83%,23%,0.59); --s-start-9:5%; --s-end-9:21.3%; --x-9:78%; --y-9:4%;
+            }
+        }
+
+        /* --- ESTILOS GENERALES --- */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(rgba(14, 53, 70, 0.94), rgba(14, 53, 70, 0.94)), url('https://www.transparenttextures.com/patterns/dark-matter.png'), #0e3546;
             color: var(--elephant-50);
             min-height: 100vh;
+            background: transparent; /* Permite ver el fondo animado */
         }
         .glass-card { 
-            background: rgba(14, 53, 70, 0.7); 
+            background: rgba(14, 53, 70, 0.45); 
             backdrop-filter: blur(12px); 
             border: 1px solid rgba(172, 237, 245, 0.1); 
             border-radius: 16px; 
@@ -63,138 +109,116 @@
             box-shadow: 0 4px 15px rgba(22, 167, 196, 0.3);
         }
         .btn-primary:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
-        .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--elephant-700); color: white; }
+        .input-dark { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--elephant-700); color: white; }
         
         mjx-container { color: var(--elephant-300) !important; font-size: 1.1em !important; }
-        
         .hidden { display: none; }
-        
         #alert-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .alert-requiem { padding: 1rem 2rem; border-radius: 8px; animation: slideIn 0.3s ease-out; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .alert-success { background: rgba(22, 167, 196, 0.9); }
-        .alert-error { background: rgba(220, 38, 38, 0.9); }
         
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        
-        .desarrollo-pasos-container {
-            overflow-x: auto;
-            scrollbar-width: thin;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.2);
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: var(--elephant-700);
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: var(--elephant-500);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--elephant-700); border-radius: 4px; }
     </style>
 </head>
 <body class="pb-20">
 
-<div id="alert-container"></div>
+    <div id="animated-bg"></div>
 
-<header class="bg-elephant-950/80 sticky top-0 z-50 border-b border-elephant-700 mb-10 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-bold tracking-tight text-white uppercase">USO O<span class="text-elephant-400"> ABUSO DEL CELULAR</span></h1>
-            <p class="text-[10px] text-elephant-500 uppercase tracking-[0.3em]">Requiem Statistics Engine v3.5</p>
-        </div>
-        <div id="loadingIndicator" class="hidden">
-            <div class="flex items-center gap-3 bg-elephant-900/50 px-4 py-2 rounded-full border border-elephant-400/30">
-                <div class="w-3 h-3 border-2 border-elephant-400 border-t-transparent rounded-full animate-spin"></div>
-                <span class="text-[10px] font-bold text-elephant-400 uppercase tracking-widest">Calculando</span>
-            </div>
-        </div>
-    </div>
-</header>
+    <div id="alert-container"></div>
 
-<main class="max-w-6xl mx-auto px-6">
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        <div class="glass-card p-8 border-b-2 border-transparent hover:border-elephant-400 transition-colors">
-            <h2 class="text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wider text-elephant-300">
-                <span class="bg-elephant-400/20 p-1 rounded">01</span> Carga de Datos CSV
-            </h2>
-            <input type="file" id="csvFile" accept=".csv" class="input-dark w-full px-4 py-2 rounded-lg text-xs mb-4 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-elephant-400 file:text-elephant-950 hover:file:bg-elephant-300 cursor-pointer">
-            <div id="vista-previa" class="hidden text-[10px] bg-black/40 p-3 rounded border border-white/5 mb-4 font-mono text-elephant-300"></div>
-            <p class="text-[10px] text-elephant-500 mb-4 italic">* El archivo debe contener una columna numérica de horas.</p>
-        </div>
-
-        <div class="glass-card p-8 border-b-2 border-transparent hover:border-purple-400 transition-colors">
-            <h2 class="text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wider text-purple-300">
-                <span class="bg-purple-400/20 p-1 rounded">02</span> Simulación Gamma
-            </h2>
-            <div class="grid grid-cols-3 gap-3 mb-4">
-                <div>
-                    <label class="block text-[9px] uppercase mb-1 text-elephant-400 font-bold">Muestra (n)</label>
-                    <input type="number" id="nEjemplo" value="100" class="input-dark w-full p-2 rounded text-sm outline-none focus:border-purple-400">
-                </div>
-                <div>
-                    <label class="block text-[9px] uppercase mb-1 text-elephant-400 font-bold">Media</label>
-                    <input type="number" id="mediaEjemplo" value="5.5" step="0.1" class="input-dark w-full p-2 rounded text-sm outline-none focus:border-purple-400">
-                </div>
-                <div>
-                    <label class="block text-[9px] uppercase mb-1 text-elephant-400 font-bold">Std Dev</label>
-                    <input type="number" id="desvEjemplo" value="1.2" step="0.1" class="input-dark w-full p-2 rounded text-sm outline-none focus:border-purple-400">
-                </div>
-            </div>
-            <button onclick="app.generarEjemplo()" class="bg-purple-600/20 border border-purple-500/50 hover:bg-purple-600/40 w-full py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all">Generar Muestra de Control</button>
-        </div>
-    </section>
-
-    <section class="glass-card p-8 mb-12 border-l-4 border-elephant-400">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+    <header class="bg-elephant-950/40 sticky top-0 z-50 border-b border-elephant-700 mb-10 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div>
-                <label class="block text-[10px] font-bold text-elephant-400 uppercase mb-2 tracking-widest">Umbral Crítico ($\mu_0$)</label>
-                <input type="number" id="input-umbral" value="5" step="0.5" class="input-dark w-full px-4 py-3 rounded-lg focus:ring-1 focus:ring-elephant-400 outline-none text-sm">
+                <h1 class="text-2xl font-bold tracking-tight text-white uppercase">USO O<span class="text-elephant-400"> ABUSO DEL CELULAR</span></h1>
+                <p class="text-[10px] text-elephant-500 uppercase tracking-[0.3em]">Requiem Statistics Engine v3.5</p>
             </div>
-            <div>
-                <label class="block text-[10px] font-bold text-elephant-400 uppercase mb-2 tracking-widest">Confianza ($1 - \alpha$)</label>
-                <select id="nivel-confianza" class="input-dark w-full px-4 py-3 rounded-lg focus:ring-1 focus:ring-elephant-400 outline-none text-sm cursor-pointer">
-                    <option value="0.90">90% Confianza</option>
-                    <option value="0.95" selected>95% Confianza</option>
-                    <option value="0.99">99% Confianza</option>
-                </select>
+            <div id="loadingIndicator" class="hidden">
+                <div class="flex items-center gap-3 bg-elephant-900/50 px-4 py-2 rounded-full border border-elephant-400/30">
+                    <div class="w-3 h-3 border-2 border-elephant-400 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-[10px] font-bold text-elephant-400 uppercase tracking-widest">Calculando</span>
+                </div>
             </div>
-            <div class="md:col-span-2">
-                <button id="btn-analizar" disabled onclick="app.ejecutarAnalisis()" class="btn-primary w-full py-3.5 rounded-lg font-bold uppercase tracking-[0.2em] text-[11px] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                    Ejecutar Inferencia Completa
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 relative z-10">
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="glass-card p-8 border-b-2 border-transparent hover:border-elephant-400 transition-colors">
+                <h2 class="text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wider text-elephant-300">
+                    <span class="bg-elephant-400/20 p-1 rounded">01</span> Carga de Datos CSV
+                </h2>
+                <input type="file" id="csvFile" accept=".csv" class="input-dark w-full px-4 py-2 rounded-lg text-xs mb-4 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-elephant-400 file:text-elephant-950 hover:file:bg-elephant-300 cursor-pointer">
+                <div id="vista-previa" class="hidden text-[10px] bg-black/40 p-3 rounded border border-white/5 mb-4 font-mono text-elephant-300"></div>
+                <p class="text-[10px] text-elephant-500 mb-4 italic">* El archivo debe contener una columna numérica de horas.</p>
+            </div>
+
+            <div class="glass-card p-8 border-b-2 border-transparent hover:border-purple-400 transition-colors">
+                <h2 class="text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wider text-purple-300">
+                    <span class="bg-purple-400/20 p-1 rounded">02</span> Simulación Gamma
+                </h2>
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div>
+                        <label class="block text-[9px] uppercase mb-1 text-elephant-400 font-bold">Muestra (n)</label>
+                        <input type="number" id="nEjemplo" value="100" class="input-dark w-full p-2 rounded text-sm outline-none focus:border-purple-400">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] uppercase mb-1 text-elephant-400 font-bold">Media</label>
+                        <input type="number" id="mediaEjemplo" value="5.5" step="0.1" class="input-dark w-full p-2 rounded text-sm outline-none focus:border-purple-400">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] uppercase mb-1 text-elephant-400 font-bold">Std Dev</label>
+                        <input type="number" id="desvEjemplo" value="1.2" step="0.1" class="input-dark w-full p-2 rounded text-sm outline-none focus:border-purple-400">
+                    </div>
+                </div>
+                <button onclick="app.generarEjemplo()" class="bg-purple-600/20 border border-purple-500/50 hover:bg-purple-600/40 w-full py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all">Generar Muestra de Control</button>
+            </div>
+        </section>
+
+        <section class="glass-card p-8 mb-12 border-l-4 border-elephant-400">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                <div>
+                    <label class="block text-[10px] font-bold text-elephant-400 uppercase mb-2 tracking-widest">Umbral Crítico ($\mu_0$)</label>
+                    <input type="number" id="input-umbral" value="5" step="0.5" class="input-dark w-full px-4 py-3 rounded-lg focus:ring-1 focus:ring-elephant-400 outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-elephant-400 uppercase mb-2 tracking-widest">Confianza ($1 - \alpha$)</label>
+                    <select id="nivel-confianza" class="input-dark w-full px-4 py-3 rounded-lg focus:ring-1 focus:ring-elephant-400 outline-none text-sm cursor-pointer">
+                        <option value="0.90">90% Confianza</option>
+                        <option value="0.95" selected>95% Confianza</option>
+                        <option value="0.99">99% Confianza</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <button id="btn-analizar" disabled onclick="app.ejecutarAnalisis()" class="btn-primary w-full py-3.5 rounded-lg font-bold uppercase tracking-[0.2em] text-[11px] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                        Ejecutar Inferencia Completa
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-8 border-t border-white/5 pt-4">
+                <button id="btnPreview" class="text-[10px] font-bold uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition flex items-center gap-2">
+                    <span>▶ Ver datos crudos cargados</span>
                 </button>
+                <div id="previewDatos" class="hidden mt-4 rounded-md bg-black/40 p-4 border border-cyan-900/50 max-h-64 overflow-auto custom-scrollbar"></div>
+            </div>
+        </section>
+
+        <div id="contenedor-analisis" class="space-y-10 min-h-[300px]">
+            <div class="text-center py-20 opacity-20 border-2 border-dashed border-elephant-700 rounded-2xl" id="esperando">
+                <p class="font-mono text-sm tracking-widest uppercase">Esperando flujo de datos...</p>
             </div>
         </div>
+    </main>
 
-        <div class="mt-8 border-t border-white/5 pt-4">
-            <button id="btnPreview" class="text-[10px] font-bold uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition flex items-center gap-2">
-                <span>▶ Ver datos crudos cargados</span>
-            </button>
-            
-            <div id="previewDatos" class="hidden mt-4 rounded-md bg-black/40 p-4 border border-cyan-900/50 max-h-64 overflow-auto custom-scrollbar">
-            </div>
+    <footer class="mt-20 py-10 border-t border-white/5 text-center bg-black/20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-elephant-500 text-[9px] uppercase tracking-widest">
+            <p>© 2026 FACULTAD DE CIENCIAS PURAS Y NATURALES - PROYECTO ESTADÍSTICA 2</p>
+            <p class="font-mono text-elephant-600">Diddy Party Team // Build 3.5.0-Final</p>
         </div>
-    </section>
+    </footer>
 
-    <div id="contenedor-analisis" class="space-y-10 min-h-[300px]">
-        <div class="text-center py-20 opacity-20 border-2 border-dashed border-elephant-700 rounded-2xl" id="esperando">
-            <p class="font-mono text-sm tracking-widest uppercase">Esperando flujo de datos...</p>
-        </div>
-    </div>
-</main>
-
-<footer class="mt-20 py-10 border-t border-white/5 text-center bg-black/20">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-elephant-500 text-[9px] uppercase tracking-widest">
-        <p>© 2026 FACULTAD DE CIENCIAS PURAS Y NATURALES - PROYECTO ESTADÍSTICA 2</p>
-        <p class="font-mono text-elephant-600">Diddy Party Team // Build 3.5.0-Final</p>
-    </div>
-</footer>
-
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 </body>
 </html>
