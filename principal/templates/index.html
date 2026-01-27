@@ -65,12 +65,10 @@
         .btn-primary:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
         .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--elephant-700); color: white; }
         
-        /* Ajuste para que las fórmulas de MathJax no sean blancas puras y cansen la vista */
         mjx-container { color: var(--elephant-300) !important; font-size: 1.1em !important; }
         
         .hidden { display: none; }
         
-        /* Sistema de Alertas */
         #alert-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .alert-requiem { padding: 1rem 2rem; border-radius: 8px; animation: slideIn 0.3s ease-out; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
         .alert-success { background: rgba(22, 167, 196, 0.9); }
@@ -78,10 +76,24 @@
         
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
-        /* Contenedor de fórmulas inyectadas */
         .desarrollo-pasos-container {
             overflow-x: auto;
             scrollbar-width: thin;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--elephant-700);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--elephant-500);
         }
     </style>
 </head>
@@ -138,7 +150,7 @@
     </section>
 
     <section class="glass-card p-8 mb-12 border-l-4 border-elephant-400">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
             <div>
                 <label class="block text-[10px] font-bold text-elephant-400 uppercase mb-2 tracking-widest">Umbral Crítico ($\mu_0$)</label>
                 <input type="number" id="input-umbral" value="5" step="0.5" class="input-dark w-full px-4 py-3 rounded-lg focus:ring-1 focus:ring-elephant-400 outline-none text-sm">
@@ -151,9 +163,20 @@
                     <option value="0.99">99% Confianza</option>
                 </select>
             </div>
-            <button id="btn-analizar" disabled onclick="app.ejecutarAnalisis()" class="btn-primary w-full py-3.5 rounded-lg font-bold uppercase tracking-[0.2em] text-[11px] shadow-lg disabled:grayscale">
-                Ejecutar Inferencia Completa
+            <div class="md:col-span-2">
+                <button id="btn-analizar" disabled onclick="app.ejecutarAnalisis()" class="btn-primary w-full py-3.5 rounded-lg font-bold uppercase tracking-[0.2em] text-[11px] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                    Ejecutar Inferencia Completa
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-8 border-t border-white/5 pt-4">
+            <button id="btnPreview" class="text-[10px] font-bold uppercase tracking-widest text-cyan-400 hover:text-cyan-300 transition flex items-center gap-2">
+                <span>▶ Ver datos crudos cargados</span>
             </button>
+            
+            <div id="previewDatos" class="hidden mt-4 rounded-md bg-black/40 p-4 border border-cyan-900/50 max-h-64 overflow-auto custom-scrollbar">
+            </div>
         </div>
     </section>
 
@@ -166,7 +189,7 @@
 
 <footer class="mt-20 py-10 border-t border-white/5 text-center bg-black/20">
     <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-elephant-500 text-[9px] uppercase tracking-widest">
-        <p>© 2026 FACULTAD DE ciencias Puras y Naturales - PROYECTO ESTADÍSTICA 2</p>
+        <p>© 2026 FACULTAD DE CIENCIAS PURAS Y NATURALES - PROYECTO ESTADÍSTICA 2</p>
         <p class="font-mono text-elephant-600">Diddy Party Team // Build 3.5.0-Final</p>
     </div>
 </footer>
@@ -174,6 +197,5 @@
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 </body>
-
 </html>
 
