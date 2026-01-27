@@ -1,0 +1,51 @@
+﻿age,gender,horas_uso,platform,interests,location,demographics,profession,income,indebt,isHomeOwner,Owns_Car
+19,M,7.8,Instagram;YouTube,Technology;Gaming,Urban,Student,Student - Technical field,Low,Yes,No,No
+18,F,7.7,TikTok;Instagram,Design;Social Media,Urban,Student,Student - Technical field,Low,Yes,No,No
+25,F,5.7,YouTube;LinkedIn,Programming;AI,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+20,F,3.1,Instagram;WhatsApp,Communication;Culture,Suburban,Student,Student - Social sciences,Low,No,No,No
+20,M,5.5,YouTube;Facebook,Politics;News,Urban,Student,Student - Social sciences,Low,Yes,No,No
+24,M,8.5,TikTok;Instagram,Trends;Networking,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+19,F,5.0,Instagram;YouTube,Technology;Design,Urban,Student,Student - Technical field,Low,Yes,No,No
+23,M,6.7,YouTube;Reddit,Programming;Tech News,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+22,F,4.4,Instagram;Pinterest,UX;Creativity,Urban,Student,Student - Technical field,Low,Yes,No,No
+23,F,4.2,Instagram;WhatsApp,Design;Productivity,Suburban,Student,Student - Technical field,Low,Yes,No,Yes
+19,M,5.9,Facebook;YouTube,Society;Debate,Urban,Student,Student - Social sciences,Low,Yes,No,No
+24,F,5.7,Instagram;TikTok,Psychology;Wellness,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+23,M,5.2,YouTube;Twitter,Technology;Innovation,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+25,M,7.5,Instagram;LinkedIn,Leadership;Management,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+18,M,4.4,TikTok;Instagram,Entertainment;Trends,Urban,Student,Student - Social sciences,Low,No,No,No
+22,F,3.0,YouTube;Pinterest,Study;Organization,Suburban,Student,Student - Technical field,Low,Yes,No,No
+25,F,6.5,Instagram;YouTube,Human Behavior;Culture,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+25,F,6.5,YouTube;Reddit,Data;Systems,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+23,F,7.7,TikTok;Instagram,Media;Communication,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+21,F,2.6,WhatsApp;YouTube,Study;Productivity,Suburban,Student,Student - Technical field,Low,Yes,No,No
+19,M,8.6,Instagram;TikTok,Networking;Trends,Urban,Student,Student - Social sciences,Low,Yes,No,No
+19,F,7.8,TikTok;Instagram,Lifestyle;Media,Urban,Student,Student - Social sciences,Low,Yes,No,No
+23,M,4.3,YouTube;Twitter,Technology;Debate,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+18,M,8.0,TikTok;YouTube,Streaming;Gaming,Urban,Student,Student - Technical field,Low,No,No,No
+21,F,2.7,Instagram;WhatsApp,Wellness;Study,Suburban,Student,Student - Social sciences,Low,Yes,No,No
+22,M,6.9,YouTube;Facebook,Economics;News,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+19,M,6.0,YouTube;Discord,Gaming;Tech,Urban,Student,Student - Technical field,Low,Yes,No,No
+20,F,4.6,Instagram;Pinterest,Design;Creativity,Urban,Student,Student - Technical field,Low,Yes,No,No
+18,M,5.0,TikTok;Instagram,Entertainment;Media,Urban,Student,Student - Social sciences,Low,No,No,No
+20,F,5.2,YouTube;Instagram,Learning;Tech,Urban,Student,Student - Technical field,Low,Yes,No,No
+24,F,6.3,Instagram;YouTube,Culture;Society,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+25,M,7.6,YouTube;LinkedIn,Software;Career,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+21,F,4.8,Instagram;Pinterest,Creativity;Design,Urban,Student,Student - Technical field,Low,Yes,No,No
+24,F,4.9,Facebook;YouTube,Society;Education,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+22,F,8.1,TikTok;YouTube,Innovation;Media,Urban,Student,Student - Technical field,Low,Yes,No,No
+21,M,7.9,Instagram;TikTok,Communication;Trends,Urban,Student,Student - Social sciences,Low,Yes,No,No
+21,M,5.8,YouTube;Reddit,Engineering;Tech,Urban,Student,Student - Technical field,Low,Yes,No,No
+24,F,8.7,YouTube;Instagram,Data Science;AI,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+18,M,8.7,TikTok;Instagram,Entertainment;Streaming,Urban,Student,Student - Social sciences,Low,No,No,No
+20,M,3.2,Facebook;WhatsApp,News;Society,Suburban,Student,Student - Social sciences,Low,Yes,No,No
+23,M,2.9,YouTube;Reddit,Programming;Logic,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+20,M,3.5,YouTube;WhatsApp,Study;Focus,Suburban,Student,Student - Technical field,Low,Yes,No,No
+21,F,5.5,Instagram;Pinterest,Design;UX,Urban,Student,Student - Technical field,Low,Yes,No,No
+21,F,3.4,YouTube;WhatsApp,Organization;Study,Suburban,Student,Student - Technical field,Low,Yes,No,No
+24,M,4.3,YouTube;LinkedIn,Tech Career;Learning,Urban,Student,Student - Technical field,Low,Yes,No,Yes
+18,M,7.8,TikTok;YouTube,Gaming;Streaming,Urban,Student,Student - Technical field,Low,No,No,No
+25,M,7.2,Instagram;LinkedIn,Leadership;Media,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+22,F,7.3,Instagram;TikTok,Communication;Trends,Urban,Student,Student - Social sciences,Low,Yes,No,Yes
+20,F,8.5,YouTube;Instagram,Innovation;Tech,Urban,Student,Student - Technical field,Low,Yes,No,No
+22,F,8.8,TikTok;Instagram,Media;Lifestyle,Urban,Student,Student - Social sciences,Low,Yes,No,Yes

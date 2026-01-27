@@ -1,0 +1,84 @@
+=
+# Análisis Estadístico del Uso del Celular
+# Requirements File - Versión 3.0
+=
+# 
+# Instalación:
+#   pip install -r requirements.txt
+# 
+# Python requerido: >=3.10,<3.13
+# 
+=
+
+# -----------------------------------------------------------------------------
+# BACKEND - Framework Web
+# -----------------------------------------------------------------------------
+Flask==3.0.3
+Werkzeug==3.0.6
+flask-cors==4.0.1
+
+# -----------------------------------------------------------------------------
+# CIENCIA DE DATOS - Core
+# -----------------------------------------------------------------------------
+numpy==1.26.4
+pandas==2.1.4
+scipy==1.11.4
+
+# -----------------------------------------------------------------------------
+# VISUALIZACIÓN
+# -----------------------------------------------------------------------------
+matplotlib==3.8.2
+seaborn==0.13.2
+
+# -----------------------------------------------------------------------------
+# MATEMÁTICAS SIMBÓLICAS
+# -----------------------------------------------------------------------------
+sympy==1.12
+
+# -----------------------------------------------------------------------------
+# UTILIDADES WEB Y NETWORKING
+# -----------------------------------------------------------------------------
+requests==2.31.0
+
+# -----------------------------------------------------------------------------
+# TIPADO Y CALIDAD DE CÓDIGO (Opcional para desarrollo)
+# -----------------------------------------------------------------------------
+# mypy==1.8.0
+# black==24.1.1
+# flake8==7.0.0
+
+# -----------------------------------------------------------------------------
+# TESTING (Opcional para desarrollo)
+# -----------------------------------------------------------------------------
+# pytest==8.0.0
+# pytest-cov==4.1.0
+
+# -----------------------------------------------------------------------------
+
+=
+# NOTAS DE INSTALACIÓN
+=
+# 
+# 1. Crear entorno virtual (recomendado):
+#    python -m venv venv
+#    
+# 2. Activar entorno:
+#    - Windows: venv\Scripts\activate
+#    - Linux/Mac: source venv/bin/activate
+#    
+# 3. Instalar dependencias:
+#    pip install --upgrade pip
+#    pip install -r requirements.txt
+#    
+# 4. Verificar instalación:
+#    python -c "import flask, numpy, pandas, scipy; print('✓ Dependencias OK')"
+#
+=
+# COMPATIBILIDAD
+=
+# 
+# Probado en:
+# - Python 3.10
+# - Windows 11
+
+=
