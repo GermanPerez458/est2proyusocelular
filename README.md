@@ -16,7 +16,7 @@ UI/UX mejorada - Diseño moderno con feedback visual claro
 Manejo robusto de errores - Sin crashes, mensajes claros
 Código limpio - Modular, documentado, mantenible
 
-🔧 Problemas Solucionados
+ Problemas Solucionados
  Problema 1: Gráficos no se mostraban
 Causa: Estructura JSON incorrecta, callbacks de Plotly mal configurados
 Solución:
@@ -181,7 +181,7 @@ Código de Ejemplo
 </style>
 
 
-📊 Mejoras Estadísticas
+ Estadísticas
 Capítulo 1: Distribución
 Histograma con bins optimizados (regla Sturges)
 Estadísticas completas (media, mediana, CV, IQR)
@@ -203,7 +203,7 @@ Prueba t de Welch (varianzas desiguales)
 Cohen's d para tamaño del efecto
 Boxplots comparativos con medias
 
-🔐 Mejoras de Robustez
+ Robustez
 Validación de Datos
 def validar_datos(datos, min_obs=10, max_obs=10000):
     datos = np.array(datos)
@@ -352,4 +352,5 @@ Boxplots con medias marcadas
 Prueba t de Welch (varianzas desiguales)
 Cohen's d con interpretación
 4 fórmulas + IC diferencia
+
 
