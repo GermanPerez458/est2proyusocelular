@@ -5,9 +5,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# ==========================================
+
 # UTILIDADES
-# ==========================================
 def _preparar_datos(datos) -> np.ndarray:
     """Valida y limpia datos para análisis estadístico."""
     datos = np.asarray(datos, dtype=np.float64)
@@ -42,9 +41,8 @@ def envolver_capitulo(
         "grafico_datos": grafico_datos
     }
 
-# ==========================================
+
 # CAPÍTULOS
-# ==========================================
 
 def capitulo_1_descriptiva(datos: np.ndarray) -> Dict[str, Any]:
     try:
