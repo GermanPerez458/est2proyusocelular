@@ -26,7 +26,7 @@ try:
     )
 except ImportError as e:
     logging.error(f"Error al importar modulos: {e}")
-    sys.exit(1)
+    pass
 
 app = Flask(__name__)
 app.config.update({
@@ -81,71 +81,151 @@ def serializar_numpy(obj):
 def index():
     return render_template("index.html")
 
-@app.route("/api/upload", methods=["POST"])
+@app.route('/api/upload', methods=['POST'])
 def upload_csv():
     if 'file' not in request.files:
-        return jsonify({"error": "No se recibio archivo"}), 400
+        return jsonify({"error": "No se recibió el archivo"}), 400
     
     file = request.files['file']
-    datos = data_loader.cargar_csv(file)
-    
-    if datos is None or len(datos) == 0:
-        return jsonify({"error": "Datos no validos"}), 400
+    if file.filename == '':
+        return jsonify({"error": "Nombre de archivo vacío"}), 400
 
-    session_id, stats = session_manager.create_session(datos, fuente=file.filename)
-    return jsonify({"session_id": session_id, "datos": {"filas_validas": len(datos)}, "estadisticas": stats})
+    # Procesamiento flexible del CSV
+    resultado = data_loader.procesar_csv_flexible(file)
+    
+    if resultado is None:
+        return jsonify({"error": "No se encontraron columnas numéricas (horas) válidas"}), 400
+
+    datos_array = resultado["array"]
+    datos_preview = resultado["preview"]
+
+    validacion = data_loader.validar_datos(datos_array)
+    
+    if not validacion["valido"]:
+        return jsonify({"error": " ".join(validacion["errores"])}), 400
+
+    # Crear sesión con los datos procesados
+    session_id, stats = session_manager.create_session(datos_array, fuente=file.filename)
+
+    return jsonify({
+        "session_id": session_id,
+        "estadisticas": stats,
+        "datos": datos_preview,
+        "filas": datos_preview,
+        "conteo": {
+            "filas_validas": len(datos_array)
+        }
+    })
 
 @app.route("/api/generar_ejemplo", methods=["POST"])
 def generar_ejemplo():
     try:
+        # 1. Obtener parámetros 
         params = request.get_json()
-        n, media, std = int(params.get('n', 100)), float(params.get('media', 5.5)), float(params.get('desviacion', 1.5))
-        shape, scale = (media / std)**2, (std**2) / media
+        n = int(params.get('n', 100))
+        media = float(params.get('media', 5.5))
+        std = float(params.get('desviacion', 1.5))
+        
+        # 2. Generar datos usando distribución Gamma 
+        if std <= 0: 
+            std = 0.1 
+        
+        shape = (media / std)**2
+        scale = (std**2) / media
+        
         datos = np.random.gamma(shape, scale, n)
-        datos = np.clip(datos, 0.5, 24) 
+        datos = np.clip(datos, 0.5, 24)  
+        
+        # 3. Formatear para la tabla del Frontend
+        datos_preview = [{"Horas (Simulado)": round(float(x), 2)} for x in datos]
 
-        session_id, stats = session_manager.create_session(datos, fuente="Simulado")
-        return jsonify({"success": True, "session_id": session_id, "estadisticas": stats})
+        # 4. Crear sesión y estadísticas
+        session_id, stats = session_manager.create_session(datos, fuente="Muestra de Control")
+        
+        # 5. Retornar respuesta COMPLETA
+        return jsonify({
+            "success": True, 
+            "session_id": session_id, 
+            "estadisticas": stats,
+            "datos": datos_preview, 
+            "filas": datos_preview  
+        })
+
     except Exception as e:
+        print(f"Error en generar_ejemplo: {e}")
         return jsonify({"success": False, "error": str(e)}), 400
 
 @app.route("/api/analisis_completo", methods=["POST"])
 def analisis_completo():
     try:
-        payload = request.get_json()
-        session_id = payload.get("session_id")
-        umbral = float(payload.get("umbral", 5.0))
-        confianza = float(payload.get("nivel_confianza", 0.95))
+        params = request.get_json()
+        session_id = params.get("session_id")
+        umbral = float(params.get("umbral", 5.0))
+        nivel_confianza = float(params.get("nivel_confianza", 0.95))
         
-        # 1. Intentar recuperar del cache
-        cache = session_manager.obtener_cache(session_id, umbral, confianza)
-        if cache:
-            return jsonify(cache)
-
-        session = session_manager.get_session(session_id)
-        if not session:
-            return jsonify({"error": "Sesion no encontrada"}), 404
-
-        datos = session["datos"]
-
-        # 2. Ejecutar calculos 
-        resultado = serializar_numpy({
-            "capitulo1_descriptiva": capitulo_1_descriptiva(datos),
-            "capitulo2_estimacion": capitulo_2_estimacion(datos),
-            "capitulo3_intervalos": capitulo_3_intervalos(datos, nivel_confianza=confianza),
-            "capitulo4_hipotesis": capitulo_4_hipotesis(datos, umbral=umbral, alpha=(1-confianza)),
-            "capitulo5_comparacion": capitulo_5_comparacion(datos, datos * 0.9),
-            "metadata": {"session_id": session_id, "n": len(datos), "timestamp": datetime.now().isoformat()}
-        })
-
-        # 3. Guardar en cache 
-        session_manager.guardar_cache(session_id, umbral, confianza, resultado)
+        # Verificar sesión
+        sesion = session_manager.get_session(session_id)
+        if not sesion:
+            return jsonify({"error": "Sesión no válida o expirada"}), 400
+        
+        datos = sesion["datos"]
+        
+        # Verificar cache
+        cached = session_manager.obtener_cache(session_id, umbral, nivel_confianza)
+        if cached:
+            return jsonify(cached)
+        
+        # Ejecutar análisis
+        resultado = {}
+        
+        # Capítulo 1: Estadística Descriptiva
+        try:
+            cap1 = capitulo_1_descriptiva(datos)
+            resultado["capitulo1_descriptiva"] = serializar_numpy(cap1)
+        except Exception as e:
+            logger.error(f"Error en capítulo 1: {e}")
+            resultado["capitulo1_descriptiva"] = {"error": str(e)}
+        
+        # Capítulo 2: Estimación Puntual
+        try:
+            cap2 = capitulo_2_estimacion(datos)
+            resultado["capitulo2_estimacion"] = serializar_numpy(cap2)
+        except Exception as e:
+            logger.error(f"Error en capítulo 2: {e}")
+            resultado["capitulo2_estimacion"] = {"error": str(e)}
+        
+        # Capítulo 3: Intervalos de Confianza
+        try:
+            cap3 = capitulo_3_intervalos(datos, nivel_confianza)
+            resultado["capitulo3_intervalos"] = serializar_numpy(cap3)
+        except Exception as e:
+            logger.error(f"Error en capítulo 3: {e}")
+            resultado["capitulo3_intervalos"] = {"error": str(e)}
+        
+        # Capítulo 4: Prueba de Hipótesis
+        try:
+            cap4 = capitulo_4_hipotesis(datos, umbral, nivel_confianza)
+            resultado["capitulo4_hipotesis"] = serializar_numpy(cap4)
+        except Exception as e:
+            logger.error(f"Error en capítulo 4: {e}")
+            resultado["capitulo4_hipotesis"] = {"error": str(e)}
+        
+        # Capítulo 5: Comparación
+        try:
+            cap5 = capitulo_5_comparacion(datos, umbral, nivel_confianza)
+            resultado["capitulo5_comparacion"] = serializar_numpy(cap5)
+        except Exception as e:
+            logger.error(f"Error en capítulo 5: {e}")
+            resultado["capitulo5_comparacion"] = {"error": str(e)}
+        
+        # Guardar en cache
+        session_manager.guardar_cache(session_id, umbral, nivel_confianza, resultado)
         
         return jsonify(resultado)
-
+        
     except Exception as e:
-        logger.error(traceback.format_exc())
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"Error crítico en analisis_completo: {traceback.format_exc()}")
+        return jsonify({"error": f"Error en el análisis: {str(e)}"}), 500
 
 @app.route("/api/analisis_rapido", methods=["POST"])
 def health_check():
