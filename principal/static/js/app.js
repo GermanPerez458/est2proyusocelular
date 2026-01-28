@@ -166,15 +166,37 @@ const app = {
                     'capitulo5_comparacion'
                 ];
                 
+                // AGREGAR ESTE LOG PARA DEBUG
+                console.log("=== DATOS RECIBIDOS ===");
+                capKeys.forEach(key => {
+                    if (data[key]) {
+                        console.log(`✓ ${key}:`, Object.keys(data[key]));
+                    } else {
+                        console.error(`✗ ${key}: NO ENCONTRADO`);
+                    }
+                });
+                
                 let currentBatch = 0;
 
                 const renderBatch = () => {
                     if (currentBatch < capKeys.length) {
                         const key = capKeys[currentBatch];
+                        console.log(`Renderizando ${key}...`);
+                        
                         if (data[key] && !data[key].error) {
                             this.renderCapitulo(data[key], currentBatch);
+                            console.log(`✓ ${key} renderizado`);
                         } else if (data[key] && data[key].error) {
-                            console.warn(`Error en ${key}:`, data[key].error);
+                            console.error(`✗ Error en ${key}:`, data[key].error);
+                            // MOSTRAR ERROR EN LA UI
+                            contenedor.insertAdjacentHTML('beforeend', `
+                                <div class="glass-card p-8 mb-10 border-t-2 border-red-400">
+                                    <h2 class="text-2xl font-bold text-red-400">Error en ${key}</h2>
+                                    <p class="text-white mt-4">${data[key].error}</p>
+                                </div>
+                            `);
+                        } else {
+                            console.error(`✗ ${key} no existe en la respuesta`);
                         }
                         currentBatch++;
                         requestAnimationFrame(() => setTimeout(renderBatch, 60));
@@ -276,26 +298,36 @@ const app = {
             plot_bgcolor: 'rgba(0,0,0,0)',
             font: { color: '#72dcee', size: 10, family: 'Inter' },
             margin: { t: 20, b: 40, l: 40, r: 20 },
-            showlegend: false,
+            showlegend: true,
+            legend: { x: 0.7, y: 0.95, bgcolor: 'rgba(0,0,0,0.3)' },
             xaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false },
             yaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false }
         };
 
-        if (cfg.tipo === 'histograma' || cfg.tipo === 'boxplot') {
+        if (cfg.tipo === 'histograma') {
             traces.push({
-                x: cfg.tipo === 'histograma' ? cfg.data : null,
-                y: cfg.tipo === 'boxplot' ? cfg.data : null,
-                type: cfg.tipo,
+                x: cfg.data,
+                type: 'histogram',
                 marker: { color: '#32c4de', line: { color: '#fff', width: 0.5 } },
-                opacity: 0.7
+                opacity: 0.7,
+                name: 'Frecuencia'
+            });
+        } else if (cfg.tipo === 'boxplot') {
+            traces.push({
+                y: cfg.data,
+                type: 'box',
+                marker: { color: '#32c4de' },
+                name: 'Distribución'
             });
         } else if (cfg.tipo === 'hipotesis') {
             traces.push({
-                x: cfg.x, y: cfg.y,
-                type: 'scatter', mode: 'lines',
+                x: cfg.x, 
+                y: cfg.y,
+                type: 'scatter', 
+                mode: 'lines',
                 fill: 'tozeroy',
                 line: { color: '#16a7c4', width: 2 },
-                name: 'Distribución'
+                name: 'Distribución T'
             });
             if (cfg.t_stat !== undefined) {
                 traces.push({
@@ -304,6 +336,36 @@ const app = {
                     mode: 'lines',
                     line: { color: '#ff4d4d', width: 3, dash: 'dash' },
                     name: 'T-obs'
+                });
+            }
+        } else if (cfg.tipo === 'comparacion') {
+            // NUEVO: Gráfico de comparación para Capítulo 5
+            if (cfg.data_obs && cfg.data_obs.length > 0) {
+                traces.push({
+                    y: cfg.data_obs,
+                    type: 'box',
+                    name: 'Datos Observados',
+                    marker: { color: '#32c4de' },
+                    boxmean: 'sd'
+                });
+            }
+            if (cfg.data_h0 && cfg.data_h0.length > 0) {
+                traces.push({
+                    y: cfg.data_h0,
+                    type: 'box',
+                    name: 'Datos H₀ (Simulados)',
+                    marker: { color: '#ff9900' },
+                    boxmean: 'sd'
+                });
+            }
+            // Línea del umbral
+            if (cfg.umbral !== undefined) {
+                traces.push({
+                    x: [0, 1],
+                    y: [cfg.umbral, cfg.umbral],
+                    mode: 'lines',
+                    line: { color: '#ff4d4d', width: 2, dash: 'dot' },
+                    name: 'μ₀ (Umbral)'
                 });
             }
         }
@@ -415,3 +477,4 @@ const app = {
 
 // Inicialización cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', () => app.init());
+
