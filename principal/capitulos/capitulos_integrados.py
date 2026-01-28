@@ -198,33 +198,105 @@ def capitulo_4_hipotesis(datos: np.ndarray, umbral: float = 5.0, alpha: float = 
         logger.error(f"Error Cap 4: {e}")
         raise
 
-def capitulo_5_comparacion(grupo1: np.ndarray, grupo2: np.ndarray) -> Dict[str, Any]:
+def capitulo_5_comparacion(datos: np.ndarray, umbral: float = 5.0, nivel_confianza: float = 0.95) -> Dict[str, Any]:
+    """
+    Capítulo 5: Comparación de Métodos Estadísticos
+    Compara los datos observados vs un grupo de control generado bajo H0
+    """
     try:
-        g1, g2 = _preparar_datos(grupo1), _preparar_datos(grupo2)
-        media1, media2 = np.mean(g1), np.mean(g2)
-        t_stat, p_valor = stats.ttest_ind(g1, g2, equal_var=False)
+        datos_obs = _preparar_datos(datos)
+        n = datos_obs.size
+        
+        # Generar grupo de control bajo H0 (μ = umbral)
+        # Usamos la desviación observada para mantener realismo
+        s_obs = np.std(datos_obs, ddof=1)
+        np.random.seed(42)  # Para reproducibilidad
+        datos_h0 = np.random.normal(loc=umbral, scale=s_obs, size=n)
+        
+        # Estadísticas de ambos grupos
+        media_obs = np.mean(datos_obs)
+        media_h0 = np.mean(datos_h0)
+        
+        # Prueba t de Welch para muestras independientes
+        t_stat, p_valor = stats.ttest_ind(datos_obs, datos_h0, equal_var=False)
+        
+        # Prueba t clásica (una muestra)
+        t_clasico = (media_obs - umbral) / (s_obs / np.sqrt(n))
+        p_clasico = 2 * (1 - stats.t.cdf(abs(t_clasico), df=n-1))
+        
+        # Intervalo de confianza
+        alpha = 1 - nivel_confianza
+        t_crit = stats.t.ppf(1 - alpha/2, df=n-1)
+        margen = t_crit * (s_obs / np.sqrt(n))
+        ic_lower = media_obs - margen
+        ic_upper = media_obs + margen
+        contiene_h0 = ic_lower <= umbral <= ic_upper
         
         resultados = {
-            "Diff Medias": _formatear_numero(media1 - media2),
+            "Media Observada": _formatear_numero(media_obs),
+            "Media H₀": _formatear_numero(umbral),
+            "Diferencia": _formatear_numero(media_obs - umbral),
             "T-Welch": _formatear_numero(t_stat),
-            "P-Valor": _formatear_numero(p_valor, 6)
+            "P-Welch": _formatear_numero(p_valor, 6),
+            "T-Clásico": _formatear_numero(t_clasico),
+            "P-Clásico": _formatear_numero(p_clasico, 6),
+            "IC Contiene H₀": "SÍ" if contiene_h0 else "NO"
         }
         
+        # Determinar concordancia de métodos
+        rechazar_welch = p_valor < alpha
+        rechazar_clasico = p_clasico < alpha
+        concordancia = "✓ Ambos métodos CONCUERDAN" if rechazar_welch == rechazar_clasico else "⚠ Métodos DISCREPAN"
+        decision = "RECHAZAR H₀" if rechazar_clasico else "NO RECHAZAR H₀"
+        
         desarrollo = f"""
-        <div class="bg-yellow-500/10 p-4 rounded-lg border border-yellow-500/30 text-center">
-            <p class="text-[11px] text-yellow-500 font-bold uppercase mb-2">Diferencia de Medias (Prueba Welch)</p>
-            $$t = {t_stat:.4f}$$
-            <p class="text-xs mt-2 text-elephant-400">P-valor: {p_valor:.6f}</p>
+        <div class="space-y-4">
+            <div class="bg-cyan-500/10 p-4 rounded-lg border border-cyan-500/30">
+                <p class="text-[11px] text-cyan-400 font-bold uppercase mb-2">Método 1: Prueba T Clásica (Una Muestra)</p>
+                $$t_{{clásico}} = \\frac{{\\bar{{X}} - \\mu_0}}{{s/\\sqrt{{n}}}} = \\frac{{{media_obs:.4f} - {umbral}}}{{{s_obs:.4f}/\\sqrt{{{n}}}}} = {t_clasico:.4f}$$
+                <p class="text-xs mt-2 text-elephant-300">P-valor: {p_clasico:.6f}</p>
+            </div>
+            
+            <div class="bg-yellow-500/10 p-4 rounded-lg border border-yellow-500/30">
+                <p class="text-[11px] text-yellow-400 font-bold uppercase mb-2">Método 2: Prueba Welch (Dos Muestras)</p>
+                <p class="text-xs text-elephant-300 mb-2">Comparación: Datos Observados vs Datos Simulados bajo H₀</p>
+                $$t_{{Welch}} = {t_stat:.4f}$$
+                <p class="text-xs mt-2 text-elephant-300">P-valor: {p_valor:.6f}</p>
+            </div>
+            
+            <div class="bg-purple-500/10 p-4 rounded-lg border border-purple-500/30">
+                <p class="text-[11px] text-purple-400 font-bold uppercase mb-2">Método 3: Intervalo de Confianza ({int(nivel_confianza*100)}%)</p>
+                $$IC = [{ic_lower:.4f}, {ic_upper:.4f}]$$
+                <p class="text-xs mt-2 text-elephant-300">¿Contiene μ₀ = {umbral}? <strong class="text-{'green' if contiene_h0 else 'red'}-400">{resultados['IC Contiene H₀']}</strong></p>
+            </div>
+            
+            <div class="p-4 rounded border {'border-green-500/50 bg-green-500/20' if rechazar_clasico == (not contiene_h0) else 'border-orange-500/50 bg-orange-500/20'}">
+                <p class="text-sm text-center font-bold text-white">{concordancia}</p>
+                <p class="text-xs text-center mt-1 text-elephant-300">Decisión Final: <strong>{decision}</strong></p>
+            </div>
         </div>
         """
 
+        # Preparar datos para gráfico de comparación
+        grafico_datos = {
+            "tipo": "comparacion",
+            "data_obs": datos_obs.tolist()[:100],  # Limitar para performance
+            "data_h0": datos_h0.tolist()[:100],
+            "umbral": float(umbral),
+            "media_obs": float(media_obs),
+            "media_h0": float(media_h0)
+        }
+
         return envolver_capitulo(
-            titulo="Capítulo 5: Comparación de Grupos",
-            descripcion="Detección de variaciones entre dos muestras independientes.",
+            titulo="Capítulo 5: Comparación de Métodos Estadísticos",
+            descripcion="Validación cruzada entre prueba T clásica, Welch y intervalos de confianza.",
             resultados=resultados,
             desarrollo_latex=desarrollo,
-            grafico_datos={"tipo":"boxplot","data":g1.tolist() + [None] + g2.tolist()}
+            grafico_datos=grafico_datos
         )
     except Exception as e:
         logger.error(f"Error Cap 5: {e}")
+        import traceback
+        traceback.print_exc()
         raise
+
